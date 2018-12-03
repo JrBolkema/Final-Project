@@ -1,0 +1,33 @@
+﻿Grading Rubric
+10 points: In class participation on Tuesday, 4/24, for presenting your project idea and progress and for offering constructive suggestions to your classmates
+20 points: Creativity of project idea and quality of implementation, including readability of the code
+20 points: Utilization of required technologies
+20 points: Alignment with coding standards, including unit test coverage
+----------------
+70 points: Total
+
+----------------------------------------------------------------
+Addtional Notes:
+Your project idea needs to be different from your classmates.
+Quality of implementation includes both how well you utilize each technology in your project and how well you structure your code for understandability, maintainability, and testability.
+See the next slide for the required .NET Framework technologies you need to incorporate into your project. 
+Feel free to utilize technologies beyond this list as well. It could help with overall creativity and quality of your project.
+
+----------------------------------------------------------------
+Idea of an app that tracks your workouts
+
+Requried .NET framework Technologies
+Pillars of OOP: 
+	Encapsulation	
+	Inheritance
+	Polymorphism
+	Abstraction 
+Collections - to store data before its uploaded to the databasse
+LINQ - Create a database file to store weight and other stuff
+Delegates 
+Regular Expressions - validate input
+Exception Handling - when invalid input is given
+Cryptography - encrypt how much weight is being lifted
+At least one type of concurrency, asynchrony, or parallel programming - asyncronously upload to the .mdf file
+At least one of: ADO.NET, Serialization - serialize different excersizes they create and allow them to be retrieved
+At least one of: Networking, Streams - i bet there will be a stream somewhere, maybe in the serialization
