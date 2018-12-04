@@ -10,11 +10,22 @@ namespace Final_Project
 	{
 		static void Main(string[] args)
 		{
+			Authenticate();
 			bool menu = Menu();
 			do
 			{
 				
 			} while (menu);
+		}
+
+		public static User Authenticate()
+		{
+			Console.WriteLine("Enter Your Username");
+			string Username = Console.ReadLine();
+			Console.WriteLine("Enter Your Password");
+			string Password = Console.ReadLine();
+			User currentUser = new User(Username,Password);
+			return currentUser;
 		}
 
 		public static bool Menu()

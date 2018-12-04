@@ -10,7 +10,16 @@ namespace Final_Project
 	{
 		public string Username { get; set; }
 		public string Password { get; set; }
-		public List<Workout>  Workouts { get; set; }
+		public List<Workout> Workouts { get; set; }
 
+		public User(string Username, string Password)
+		{
+			this.Username = Username;
+			this.Password = Password;
+		}
+		public void AddWorkout(Workout workout)
+		{
+			Workouts.Add(workout);
+		}
 	}
 }

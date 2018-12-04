@@ -12,5 +12,13 @@ namespace Final_Project
 		public int Sets { get; set; }
 		public int Reps { get; set; }
 		public int Weight { get; set; }
+		public Exercise(string MuscleGroup,int Sets,int Reps, int Weight)
+		{
+			this.MuscleGroup = MuscleGroup;
+			this.Sets = Sets;
+			this.Reps = Reps;
+			this.Weight = Weight;
+		}
+
 	}
 }
