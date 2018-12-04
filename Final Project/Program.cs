@@ -24,12 +24,16 @@ namespace Final_Project
 			Console.WriteLine(@"C:\Users\JrBol\source\repos\Final Project\Final Project\User Info.xml");
 
 			//Logging in a user and making sure they are valid
-			User CurrentUser = Authenticate();
+			//User CurrentUser = Authenticate();
 
+			//AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider();
+			//SymmetricEncryption Encryptor = new SymmetricEncryption();
 
-
-			var myXml = new MyXMLSerializer();
-			myXml.Serialize(formattedFilePath, CurrentUser);
+			//var myXml = new MyXMLSerializer();
+			//User deserializeTest = myXml.Deserialize<User>(formattedFilePath);
+			//byte[] bytes = Encoding.ASCII.GetBytes(deserializeTest.Password);
+			//Console.WriteLine(Encryptor.DecryptData(aesCSP,bytes));
+			//myXml.Serialize(formattedFilePath, CurrentUser);
 			bool menu = Menu();
 			do
 			{
@@ -49,9 +53,12 @@ namespace Final_Project
 			string Username = Console.ReadLine();
 			Console.WriteLine("Enter Your Password");
 			string Password = Console.ReadLine();
-			User currentUser = new User(Username,Password);
 
 			byte[] cipher = Encryptor.EncryptData(aesCSP, Password);
+			string encrpytedPassword = Convert.ToBase64String(cipher);
+
+			User currentUser = new User(Username, encrpytedPassword);
+
 
 
 			return currentUser;
