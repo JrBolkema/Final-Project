@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Final_Project
 {
-	class Exercise
+	public class Exercise
 	{
 		public string MuscleGroup { get; set; }
 		public int Sets { get; set; }
@@ -18,6 +18,12 @@ namespace Final_Project
 			this.Sets = Sets;
 			this.Reps = Reps;
 			this.Weight = Weight;
+		}
+
+		// Here because XML serializer requires a parameterless constructor
+		public Exercise()
+		{
+
 		}
 
 	}

@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Final_Project
 {
@@ -10,7 +13,23 @@ namespace Final_Project
 	{
 		static void Main(string[] args)
 		{
-			Authenticate();
+			// Obtaining a file path
+			// For storing and retrieving user information
+			string filePath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
+			string formattedFilePath = $"{filePath}\\User Info.xml";
+
+			// Verifying file path is correct
+			// Problems could arise when different computers are used
+			Console.WriteLine(formattedFilePath);
+			Console.WriteLine(@"C:\Users\JrBol\source\repos\Final Project\Final Project\User Info.xml");
+
+			//Logging in a user and making sure they are valid
+			User CurrentUser = Authenticate();
+
+
+
+			var myXml = new MyXMLSerializer();
+			myXml.Serialize(formattedFilePath, CurrentUser);
 			bool menu = Menu();
 			do
 			{
@@ -20,11 +39,21 @@ namespace Final_Project
 
 		public static User Authenticate()
 		{
+			AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider();
+			SymmetricEncryption Encryptor = new SymmetricEncryption();
+			//aesCSP.GenerateKey();
+			//aesCSP.GenerateIV();
+
+
 			Console.WriteLine("Enter Your Username");
 			string Username = Console.ReadLine();
 			Console.WriteLine("Enter Your Password");
 			string Password = Console.ReadLine();
 			User currentUser = new User(Username,Password);
+
+			byte[] cipher = Encryptor.EncryptData(aesCSP, Password);
+
+
 			return currentUser;
 		}
 

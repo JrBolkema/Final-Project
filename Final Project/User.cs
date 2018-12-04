@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Final_Project
 {
-	class User
+	public class User
 	{
 		public string Username { get; set; }
 		public string Password { get; set; }
@@ -16,6 +16,10 @@ namespace Final_Project
 		{
 			this.Username = Username;
 			this.Password = Password;
+		}
+		// Here because XML serializer requires a parameterless constructor	
+		private User()
+		{
 		}
 		public void AddWorkout(Workout workout)
 		{
