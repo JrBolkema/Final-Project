@@ -54,8 +54,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Encryption Details.xml" />
     <Content Include="Requirements.txt" />
-    <Content Include="User Info.xml" />
+    <Content Include="User Info.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

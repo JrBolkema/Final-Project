@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 
 namespace Final_Project
 {
+//use hashing the password to make cryptography work
 	class Program
 	{
 		static void Main(string[] args)
@@ -24,7 +25,7 @@ namespace Final_Project
 			Console.WriteLine(@"C:\Users\JrBol\source\repos\Final Project\Final Project\User Info.xml");
 
 			//Logging in a user and making sure they are valid
-			//User CurrentUser = Authenticate();
+			User CurrentUser = Authenticate();
 
 			//AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider();
 			//SymmetricEncryption Encryptor = new SymmetricEncryption();
@@ -47,6 +48,13 @@ namespace Final_Project
 			SymmetricEncryption Encryptor = new SymmetricEncryption();
 			//aesCSP.GenerateKey();
 			//aesCSP.GenerateIV();
+			string filePath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
+			string formattedFilePath = $"{filePath}\\Encryption Details.xml";
+
+			var myXml = new MyXMLSerializer();
+			//myXml.Serialize(formattedFilePath, aesCSP.Key);
+			//myXml.Serialize(formattedFilePath, aesCSP.IV);
+
 
 
 			Console.WriteLine("Enter Your Username");
