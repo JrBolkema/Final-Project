@@ -14,6 +14,10 @@ namespace Final_Project
 	{
 		static void Main(string[] args)
 		{
+
+
+
+			
 			// Obtaining a file path
 			// For storing and retrieving user information
 			string filePath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
@@ -24,52 +28,79 @@ namespace Final_Project
 			Console.WriteLine(formattedFilePath);
 			Console.WriteLine(@"C:\Users\JrBol\source\repos\Final Project\Final Project\User Info.xml");
 
-			//Logging in a user and making sure they are valid
-			User CurrentUser = Authenticate();
-
-			//AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider();
-			//SymmetricEncryption Encryptor = new SymmetricEncryption();
-
-			//var myXml = new MyXMLSerializer();
-			//User deserializeTest = myXml.Deserialize<User>(formattedFilePath);
-			//byte[] bytes = Encoding.ASCII.GetBytes(deserializeTest.Password);
-			//Console.WriteLine(Encryptor.DecryptData(aesCSP,bytes));
-			//myXml.Serialize(formattedFilePath, CurrentUser);
-			bool menu = Menu();
-			do
-			{
-				
-			} while (menu);
-		}
-
-		public static User Authenticate()
-		{
-			AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider();
-			SymmetricEncryption Encryptor = new SymmetricEncryption();
-			//aesCSP.GenerateKey();
-			//aesCSP.GenerateIV();
-			string filePath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
-			string formattedFilePath = $"{filePath}\\Encryption Details.xml";
-
+			
+			// Deserializing the users
 			var myXml = new MyXMLSerializer();
-			//myXml.Serialize(formattedFilePath, aesCSP.Key);
-			//myXml.Serialize(formattedFilePath, aesCSP.IV);
+			List<User> users = myXml.Deserialize<List<User>>(formattedFilePath);
 
-
-
+			//Logging in a user and making sure they are valid
 			Console.WriteLine("Enter Your Username");
 			string Username = Console.ReadLine();
 			Console.WriteLine("Enter Your Password");
 			string Password = Console.ReadLine();
 
-			byte[] cipher = Encryptor.EncryptData(aesCSP, Password);
-			string encrpytedPassword = Convert.ToBase64String(cipher);
+			User CurrentUser = Authenticate(users,Username,Password);
 
-			User currentUser = new User(Username, encrpytedPassword);
+			//  TODO make it so it is a bool and if its true then they can log in 
+			// then just log them in
+			// if false do another option to make a new account
+			
+			
+			
+			bool menu = Menu();
+			do
+			{
+				
+			} while (menu);
 
 
+		}
 
-			return currentUser;
+		public static bool Authenticate(List<User> users,string Username,string Password)
+		{
+			foreach (User user in users)
+			{
+
+				if (user.Username == Username && user.Password == Password)
+				{
+					return true;
+				}
+			}
+
+			while (CreateNewAccountChoice())
+			{
+				User user = CreateNewAccount();
+				return user;
+			}
+			User returnUser = new User("Not", "Working");
+			return returnUser;
+
+		}
+
+		private static bool CreateNewAccountChoice()
+		{
+			Console.WriteLine("Account not found, Would you like to make a new acount? (y/n)");
+			string choice = Console.ReadLine();
+			if (choice == "y")
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		public static User CreateNewAccount()
+		{
+			Console.WriteLine("*****Create New Account*****");
+
+			Console.WriteLine("What is your username?");
+			string newUsername = Console.ReadLine();
+			Console.WriteLine("What is your new password");
+			string newPassword = Console.ReadLine();
+
+			User newUser = new User (newUsername, newPassword);
+			return newUser;
 		}
 
 		public static bool Menu()
