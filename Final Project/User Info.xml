@@ -3,5 +3,21 @@
   <User>
     <Username>Jon</Username>
     <Password>tester</Password>
+    <Workouts />
+  </User>
+  <User>
+    <Username>jrb</Username>
+    <Password>123</Password>
+    <Workouts>
+      <Workout>
+        <MainMuscleGroup>Chest</MainMuscleGroup>
+        <WorkoutName>TestChest</WorkoutName>
+        <Exercises />
+      </Workout>
+      <Workout>
+        <MainMuscleGroup>Chest</MainMuscleGroup>
+        <WorkoutName>Testpart2</WorkoutName>
+      </Workout>
+    </Workouts>
   </User>
 </ArrayOfUser>

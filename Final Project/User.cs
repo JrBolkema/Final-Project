@@ -23,7 +23,7 @@ namespace Final_Project
 		}
 		public void AddWorkout(Workout workout)
 		{
-			Workouts.Add(workout);
+			this.Workouts.Add(workout);
 		}
 	}
 }

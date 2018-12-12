@@ -9,15 +9,16 @@ using System.Xml.Serialization;
 
 namespace Final_Project
 {
-//use hashing the password to make cryptography work
 	class Program
 	{
 		static void Main(string[] args)
 		{
+			Action<string> write = Console.WriteLine;
+
+			User currentUser;
 
 
 
-			
 			// Obtaining a file path
 			// For storing and retrieving user information
 			string filePath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
@@ -25,56 +26,80 @@ namespace Final_Project
 
 			// Verifying file path is correct
 			// Problems could arise when different computers are used
-			Console.WriteLine(formattedFilePath);
-			Console.WriteLine(@"C:\Users\JrBol\source\repos\Final Project\Final Project\User Info.xml");
+			write(formattedFilePath);
+			write(@"C:\Users\JrBol\source\repos\Final Project\Final Project\User Info.xml");
 
-			
+
 			// Deserializing the users
 			var myXml = new MyXMLSerializer();
 			List<User> users = myXml.Deserialize<List<User>>(formattedFilePath);
 
 			//Logging in a user and making sure they are valid
-			Console.WriteLine("Enter Your Username");
+			write("Enter Your Username");
 			string Username = Console.ReadLine();
-			Console.WriteLine("Enter Your Password");
+			write("Enter Your Password");
 			string Password = Console.ReadLine();
 
-			User CurrentUser = Authenticate(users,Username,Password);
-
-			//  TODO make it so it is a bool and if its true then they can log in 
-			// then just log them in
-			// if false do another option to make a new account
-			
-			
-			
-			bool menu = Menu();
-			do
+			// Authenticating a user
+			if (Authenticate(users, Username, Password))
 			{
-				
-			} while (menu);
+				// "Logging" them in
+				currentUser = AssignUser(users, Username, Password);
+			}
+			else
+			{
+				// asking if they want to create a new account
+				if (CreateNewAccountChoice())
+				{
+					// Create the account
+					currentUser = CreateNewAccount();
+					users.Add(currentUser);
+				}
+				else
+				{
+					User errorUser = new User("Err", "err");
+					currentUser = errorUser;
+				}
+			}
+
+			// TODO: append new user to the existing list if they dont already exist and serialize it
+			// add regex
+			// add exceptions
+			Menu(currentUser);
+
+			// Saving/Reserializing the list
+			myXml.Serialize(formattedFilePath, users);
 
 
 		}
 
-		public static bool Authenticate(List<User> users,string Username,string Password)
+		public static User AssignUser (List<User> users, string Username, string Password)
 		{
 			foreach (User user in users)
 			{
-
 				if (user.Username == Username && user.Password == Password)
+				{
+					return user;
+				}
+			}
+			User errorUser = new User("Err","err");
+			return errorUser;
+		}
+
+		public static bool Authenticate(List<User> users,string Username,string Password)
+		{
+			Hashing hasher = new Hashing();
+			
+			foreach (User user in users)
+				{
+
+				
+				if (user.Username == Username && hasher.GetHash(user.Password) == hasher.GetHash(Password))
 				{
 					return true;
 				}
 			}
-
-			while (CreateNewAccountChoice())
-			{
-				User user = CreateNewAccount();
-				return user;
-			}
-			User returnUser = new User("Not", "Working");
-			return returnUser;
-
+			return false;
 		}
 
 		private static bool CreateNewAccountChoice()
@@ -90,6 +115,7 @@ namespace Final_Project
 				return false;
 			}
 		}
+
 		public static User CreateNewAccount()
 		{
 			Console.WriteLine("*****Create New Account*****");
@@ -102,8 +128,78 @@ namespace Final_Project
 			User newUser = new User (newUsername, newPassword);
 			return newUser;
 		}
+		public static Workout CreateNewWorkout()
+		{
+			Console.WriteLine("What is the name of your new workout?");
+			string workoutName = Console.ReadLine();
+			Console.WriteLine("What is the primary muscle group of this workout?");
+			string muscleGroup = Console.ReadLine();
+			Workout newWorkout = new Workout(muscleGroup, workoutName);
 
-		public static bool Menu()
+
+			while (CreateNewExerciseChoice())
+			{
+				Exercise newExercise = CreateNewExercise();
+				newWorkout.AddExercise(newExercise);
+			}
+
+
+			return newWorkout;
+		}
+
+		public static bool CreateNewExerciseChoice()
+		{
+			Console.WriteLine("Would you like to add and exercise? (y/n)");
+			string choice = Console.ReadLine();
+			if (choice == "y")
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
+		}
+
+		public static Exercise CreateNewExercise()
+		{
+			Exercise newExercise = new Exercise("a",1,1,1);
+			int intExerciseReps = 0;
+			int intExerciseSets = 0;
+			int intExerciseWeight = 0;
+
+			Console.WriteLine("What is the muscle worked in the exercise");
+			string exerciseName = Console.ReadLine();
+			Console.WriteLine("How many sets did you do?");
+			string exerciseSets = Console.ReadLine();
+			Console.WriteLine("How many reps did you do?");
+			string exerciseReps = Console.ReadLine();
+			Console.WriteLine("How much weight did you do?");
+			string exerciseWeight = Console.ReadLine();
+
+			try
+			{
+				intExerciseReps = Convert.ToInt32(exerciseReps);
+				intExerciseSets = Convert.ToInt32(exerciseSets);
+				intExerciseWeight = Convert.ToInt32(exerciseWeight);
+
+			}
+			catch (Exception)
+			{
+				Console.WriteLine("ERROR");
+				throw;
+			}
+			finally
+			{
+				Exercise CurrentExercise = new Exercise(exerciseName, intExerciseSets, intExerciseReps, intExerciseWeight);
+				newExercise = CurrentExercise;
+			}
+			return newExercise;
+
+
+		}
+		public static void Menu(User currentUser)
 		{
 			Console.WriteLine("Would you like to:{0}1.)Log a New Workout{0}2.)View previous workouts{0}3.)Create new workout{0}4.)Quit",Environment.NewLine);
 			string choice = Console.ReadLine();
@@ -112,24 +208,26 @@ namespace Final_Project
 			int intChoice = Convert.ToInt32(choice);
 			if (intChoice == 1)
 			{
-				return true;
+			
 			}
 			else if(intChoice == 2)
 			{
-				return true;
+			
 			}
 			else if (intChoice == 3)
 			{
-				return true;
+				Workout createdWorkout = CreateNewWorkout();
+				currentUser.AddWorkout(createdWorkout);
+
+			
 			}
 			else if (intChoice == 4)
 			{
-				return false;
+			
 			}
 			else
 			{
 				Console.WriteLine("dont see this");
-				return false;
 			}
 
 
