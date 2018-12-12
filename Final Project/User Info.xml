@@ -10,13 +10,51 @@
     <Password>123</Password>
     <Workouts>
       <Workout>
-        <MainMuscleGroup>Chest</MainMuscleGroup>
-        <WorkoutName>TestChest</WorkoutName>
-        <Exercises />
+        <MainMuscleGroup>wer</MainMuscleGroup>
+        <WorkoutName>qwe</WorkoutName>
+        <Exercises>
+          <Exercise>
+            <ExerciseName>Barbell Curls</ExerciseName>
+            <MuscleGroup>Biceps</MuscleGroup>
+            <Sets>3</Sets>
+            <Reps>12</Reps>
+            <Weight>60</Weight>
+          </Exercise>
+        </Exercises>
       </Workout>
       <Workout>
-        <MainMuscleGroup>Chest</MainMuscleGroup>
-        <WorkoutName>Testpart2</WorkoutName>
+        <MainMuscleGroup>Legs</MainMuscleGroup>
+        <WorkoutName>Wednesday</WorkoutName>
+        <Exercises>
+          <Exercise>
+            <ExerciseName>Squats</ExerciseName>
+            <MuscleGroup>Compound</MuscleGroup>
+            <Sets>3</Sets>
+            <Reps>8</Reps>
+            <Weight>285</Weight>
+          </Exercise>
+          <Exercise>
+            <ExerciseName>Bulgarian Split Squats</ExerciseName>
+            <MuscleGroup>Quads</MuscleGroup>
+            <Sets>4</Sets>
+            <Reps>12</Reps>
+            <Weight>90</Weight>
+          </Exercise>
+          <Exercise>
+            <ExerciseName>Calf Raises</ExerciseName>
+            <MuscleGroup>Gastrognemius</MuscleGroup>
+            <Sets>4</Sets>
+            <Reps>15</Reps>
+            <Weight>60</Weight>
+          </Exercise>
+          <Exercise>
+            <ExerciseName>Hamstring Curls</ExerciseName>
+            <MuscleGroup>Quads</MuscleGroup>
+            <Sets>3</Sets>
+            <Reps>9</Reps>
+            <Weight>135</Weight>
+          </Exercise>
+        </Exercises>
       </Workout>
     </Workouts>
   </User>

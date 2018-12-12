@@ -15,7 +15,6 @@ namespace Final_Project
 		{
 			Action<string> write = Console.WriteLine;
 
-			User currentUser;
 
 
 
@@ -44,7 +43,9 @@ namespace Final_Project
 			if (Authenticate(users, Username, Password))
 			{
 				// "Logging" them in
-				currentUser = AssignUser(users, Username, Password);
+				User currentUser = AssignUser(users, Username, Password);
+				Menu(currentUser);
+
 			}
 			else
 			{
@@ -52,20 +53,22 @@ namespace Final_Project
 				if (CreateNewAccountChoice())
 				{
 					// Create the account
-					currentUser = CreateNewAccount();
+					User currentUser = CreateNewAccount();
 					users.Add(currentUser);
+					Menu(currentUser);
+
 				}
 				else
 				{
 					User errorUser = new User("Err", "err");
-					currentUser = errorUser;
+					User currentUser = errorUser;
+					Menu(currentUser);
+
 				}
 			}
 
 			// TODO: append new user to the existing list if they dont already exist and serialize it
 			// add regex
-			// add exceptions
-			Menu(currentUser);
 
 			// Saving/Reserializing the list
 			myXml.Serialize(formattedFilePath, users);
@@ -136,11 +139,9 @@ namespace Final_Project
 			string muscleGroup = Console.ReadLine();
 			Workout newWorkout = new Workout(muscleGroup, workoutName);
 
-
 			while (CreateNewExerciseChoice())
 			{
-				Exercise newExercise = CreateNewExercise();
-				newWorkout.AddExercise(newExercise);
+				newWorkout.AddExercise(CreateNewExercise());
 			}
 
 
@@ -164,13 +165,14 @@ namespace Final_Project
 
 		public static Exercise CreateNewExercise()
 		{
-			Exercise newExercise = new Exercise("a",1,1,1);
+			
 			int intExerciseReps = 0;
 			int intExerciseSets = 0;
 			int intExerciseWeight = 0;
-
-			Console.WriteLine("What is the muscle worked in the exercise");
+			Console.WriteLine("What is the name of this exercise?");
 			string exerciseName = Console.ReadLine();
+			Console.WriteLine("What is the muscle worked in the exercise");
+			string exerciseMuscleGroup = Console.ReadLine();
 			Console.WriteLine("How many sets did you do?");
 			string exerciseSets = Console.ReadLine();
 			Console.WriteLine("How many reps did you do?");
@@ -190,11 +192,12 @@ namespace Final_Project
 				Console.WriteLine("ERROR");
 				throw;
 			}
-			finally
-			{
-				Exercise CurrentExercise = new Exercise(exerciseName, intExerciseSets, intExerciseReps, intExerciseWeight);
-				newExercise = CurrentExercise;
-			}
+			//finally
+			//{
+				//newExercise = CurrentExercise;
+			//}
+			Exercise newExercise = new Exercise(exerciseName,exerciseMuscleGroup, intExerciseSets, intExerciseReps, intExerciseWeight);
+
 			return newExercise;
 
 
@@ -208,7 +211,7 @@ namespace Final_Project
 			int intChoice = Convert.ToInt32(choice);
 			if (intChoice == 1)
 			{
-			
+				currentUser.ShowWorkouts();
 			}
 			else if(intChoice == 2)
 			{
@@ -218,8 +221,6 @@ namespace Final_Project
 			{
 				Workout createdWorkout = CreateNewWorkout();
 				currentUser.AddWorkout(createdWorkout);
-
-			
 			}
 			else if (intChoice == 4)
 			{

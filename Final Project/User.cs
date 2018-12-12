@@ -16,6 +16,7 @@ namespace Final_Project
 		{
 			this.Username = Username;
 			this.Password = Password;
+			this.Workouts = new List<Workout>();
 		}
 		// Here because XML serializer requires a parameterless constructor	
 		private User()
@@ -24,6 +25,13 @@ namespace Final_Project
 		public void AddWorkout(Workout workout)
 		{
 			this.Workouts.Add(workout);
+		}
+		public void ShowWorkouts()
+		{
+			foreach (Workout workout in Workouts)
+			{
+				workout.ShowWorkout();
+			}
 		}
 	}
 }

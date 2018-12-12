@@ -16,12 +16,15 @@ namespace Final_Project
 		{
 			this.MainMuscleGroup = MainMuscleGroup;
 			this.WorkoutName = "Unnamed Workout";
+			this.Exercises = new List<Exercise>();
+
 		}
 
 		public Workout(string MainMuscleGroup, string Name)
 		{
 			this.MainMuscleGroup = MainMuscleGroup;
 			this.WorkoutName = Name;
+			this.Exercises = new List<Exercise>();
 
 		}
 
@@ -32,8 +35,18 @@ namespace Final_Project
 
 		public void AddExercise(Exercise exercise)
 		{
-			Console.WriteLine(exercise);
-			this.Exercises.Add(exercise);
+			Exercises.Add(exercise);
+		}
+
+		public void ShowWorkout()
+		{
+			int counter = 1;
+			foreach (Exercise exercise in Exercises)
+			{
+				Console.WriteLine($"{counter}.) {exercise.ShowExercise()}");
+				counter++;
+			}
+
 		}
 	}
 }
