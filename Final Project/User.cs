@@ -24,6 +24,7 @@ namespace Final_Project
 		}
 		public void AddWorkout(Workout workout)
 		{
+			
 			this.Workouts.Add(workout);
 		}
 		public void ShowWorkouts()

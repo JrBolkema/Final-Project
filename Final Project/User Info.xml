@@ -10,8 +10,8 @@
     <Password>123</Password>
     <Workouts>
       <Workout>
-        <MainMuscleGroup>wer</MainMuscleGroup>
-        <WorkoutName>qwe</WorkoutName>
+        <MainMuscleGroup>Bicep</MainMuscleGroup>
+        <WorkoutName>Biceps</WorkoutName>
         <Exercises>
           <Exercise>
             <ExerciseName>Barbell Curls</ExerciseName>
@@ -53,6 +53,25 @@
             <Sets>3</Sets>
             <Reps>9</Reps>
             <Weight>135</Weight>
+          </Exercise>
+        </Exercises>
+      </Workout>
+    </Workouts>
+  </User>
+  <User>
+    <Username>Jon</Username>
+    <Password>246</Password>
+    <Workouts>
+      <Workout>
+        <MainMuscleGroup>qwe</MainMuscleGroup>
+        <WorkoutName>qew</WorkoutName>
+        <Exercises>
+          <Exercise>
+            <ExerciseName>qwe</ExerciseName>
+            <MuscleGroup>qwe</MuscleGroup>
+            <Sets>1</Sets>
+            <Reps>2</Reps>
+            <Weight>3</Weight>
           </Exercise>
         </Exercises>
       </Workout>

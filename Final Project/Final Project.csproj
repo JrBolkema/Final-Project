@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database.cs" />
     <Compile Include="Exercise.cs" />
     <Compile Include="Final Project.cs" />
     <Compile Include="Hashing.cs" />

@@ -22,12 +22,12 @@ Pillars of OOP:
 	Inheritance
 	Polymorphism
 	Abstraction 
-Collections - to store data before its uploaded to the databasse
-LINQ - Create a database file to store weight and other stuff
-Delegates 
-Regular Expressions - validate input
-Exception Handling - when invalid input is given CREATENEWEXERCISE
-Cryptography - encrypt how much weight is being lifted LINE 90
-At least one type of concurrency, asynchrony, or parallel programming - asyncronously upload to the .mdf file
-At least one of: ADO.NET, Serialization - serialize different excersizes they create and allow them to be retrieved
-At least one of: Networking, Streams - i bet there will be a stream somewhere, maybe in the serialization
+Collections - everywhere basically
+LINQ - database file
+Delegates - top of main
+Regular Expressions - line 243
+Exception Handling - CREATENEWEXERCISE
+Cryptography - LINE 120
+At least one type of concurrency, asynchrony, or parallel programming - Line 21
+At least one of: ADO.NET, Serialization - Line 53/93
+At least one of: Networking, Streams - myXMLSerializer line 17

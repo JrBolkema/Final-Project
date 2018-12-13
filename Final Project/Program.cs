@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
@@ -14,9 +15,17 @@ namespace Final_Project
 	{
 		static void Main(string[] args)
 		{
+			//DELEGATE
 			Action<string> write = Console.WriteLine;
 
-
+			//THREADED CLOCK	
+			var startTimeSpan = TimeSpan.Zero;
+			var periodTimeSpan = TimeSpan.FromMinutes(.25);
+			var timer = new System.Threading.Timer((e) =>
+			{
+				string Text = DateTime.Now.ToString();
+				write(Text);
+			}, null, startTimeSpan, periodTimeSpan);
 
 			// Obtaining a file path
 			// For storing and retrieving user information
@@ -30,41 +39,12 @@ namespace Final_Project
 
 			// Creating the database connection
 			string m_ConnectionString = @"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = "
-			+$"'{filePath}\\Final Project file.mdf';"
-			+"Integrated Security = True; Connect Timeout = 90";
+			+ $"'{filePath}\\Final Project file.mdf';"
+			+ "Integrated Security = True; Connect Timeout = 90";
 			SqlConnection myConnection = new SqlConnection(m_ConnectionString);
-			
-			//Testing the database stuff
-			using (myConnection)
-			{
-				string insertQuery = @"SELECT * FROM Users";
-				//string insertQuery = @"INSERT INTO Users
-										//	([Username]
-										//	,[Password])
-										//VALUES
-										//	(@test
-										//	,@testpass);";
-				using (SqlCommand cmd = new SqlCommand(insertQuery, myConnection))
-				{
-					myConnection.Open();
-					//cmd.Parameters.AddWithValue("@test", "test");
-					//cmd.Parameters.AddWithValue("@testpass", "TestPassword");
-					//cmd.ExecuteNonQuery();
+			myConnection.Open();
 
-					SqlDataReader reader = cmd.ExecuteReader();
-					if (reader.HasRows)
-					{
-						while (reader.Read())
-						{
-							Console.WriteLine($"{reader[0]} {reader[1]} {reader[2]}");
-						}
 
-					}
-					reader.Close();
-				}
-			}
-			
-			
 			// Deserializing the users
 			var myXml = new MyXMLSerializer();
 			List<User> users = myXml.Deserialize<List<User>>(formattedFilePath);
@@ -80,7 +60,7 @@ namespace Final_Project
 			{
 				// "Logging" them in
 				User currentUser = AssignUser(users, Username, Password);
-				Menu(currentUser);
+				Menu(currentUser, myConnection);
 
 			}
 			else
@@ -91,28 +71,36 @@ namespace Final_Project
 					// Create the account
 					User currentUser = CreateNewAccount();
 					users.Add(currentUser);
-					Menu(currentUser);
+					Database database = new Database(myConnection);
+					database.AddUserToDatabase(currentUser);
+
+					Menu(currentUser, myConnection);
 
 				}
 				else
 				{
 					User errorUser = new User("Err", "err");
 					User currentUser = errorUser;
-					Menu(currentUser);
+					Menu(currentUser, myConnection);
 
 				}
-			}
-
-			// TODO: append new user to the existing list if they dont already exist and serialize it
-			// add regex
+			}			
 
 			// Saving/Reserializing the list
 			myXml.Serialize(formattedFilePath, users);
+			//Closing the connection
+			myConnection.Close();
 
 
 		}
-
-		public static User AssignUser (List<User> users, string Username, string Password)
+		/// <summary>
+		/// Will return a user from the list
+		/// </summary>
+		/// <param name="users">List of known Users</param>
+		/// <param name="Username"></param>
+		/// <param name="Password"></param>
+		/// <returns>User</returns>
+		public static User AssignUser(List<User> users, string Username, string Password)
 		{
 			foreach (User user in users)
 			{
@@ -121,18 +109,26 @@ namespace Final_Project
 					return user;
 				}
 			}
-			User errorUser = new User("Err","err");
+			User errorUser = new User("Err", "err");
 			return errorUser;
 		}
 
-		public static bool Authenticate(List<User> users,string Username,string Password)
+		/// <summary>
+		/// Will verify a given username and password against all known 
+		/// usernames an passwords
+		/// </summary>
+		/// <param name="users">List of all known users</param>
+		/// <param name="Username"></param>
+		/// <param name="Password"></param>
+		/// <returns></returns>
+		public static bool Authenticate(List<User> users, string Username, string Password)
 		{
 			Hashing hasher = new Hashing();
-			
-			foreach (User user in users)
-				{
 
-				
+			foreach (User user in users)
+			{
+
+
 				if (user.Username == Username && hasher.GetHash(user.Password) == hasher.GetHash(Password))
 				{
 					return true;
@@ -141,6 +137,10 @@ namespace Final_Project
 			return false;
 		}
 
+		/// <summary>
+		/// Prompts the user to determine if they wish to create a new account
+		/// </summary>
+		/// <returns></returns>
 		private static bool CreateNewAccountChoice()
 		{
 			Console.WriteLine("Account not found, Would you like to make a new acount? (y/n)");
@@ -155,6 +155,11 @@ namespace Final_Project
 			}
 		}
 
+		/// <summary>
+		/// Presents user with series of prompts to create
+		/// a User object
+		/// </summary>
+		/// <returns></returns>
 		public static User CreateNewAccount()
 		{
 			Console.WriteLine("*****Create New Account*****");
@@ -164,9 +169,16 @@ namespace Final_Project
 			Console.WriteLine("What is your new password");
 			string newPassword = Console.ReadLine();
 
-			User newUser = new User (newUsername, newPassword);
+			User newUser = new User(newUsername, newPassword);
 			return newUser;
 		}
+
+		/// <summary>
+		/// presents the use with a series of prompts to create
+		/// and return a workout object
+		/// also gives user option to add Exercises
+		/// </summary>
+		/// <returns></returns>
 		public static Workout CreateNewWorkout()
 		{
 			Console.WriteLine("What is the name of your new workout?");
@@ -184,9 +196,14 @@ namespace Final_Project
 			return newWorkout;
 		}
 
+		/// <summary>
+		/// asks the user if they wish to create an exercise
+		/// returns true if yes false if no
+		/// </summary>
+		/// <returns></returns>
 		public static bool CreateNewExerciseChoice()
 		{
-			Console.WriteLine("Would you like to add and exercise? (y/n)");
+			Console.WriteLine("Would you like to add an exercise? (y/n)");
 			string choice = Console.ReadLine();
 			if (choice == "y")
 			{
@@ -199,9 +216,14 @@ namespace Final_Project
 
 		}
 
+		/// <summary>
+		/// Presents user with series of prompts in order to create and
+		/// return an exercise object 
+		/// </summary>
+		/// <returns></returns>
 		public static Exercise CreateNewExercise()
 		{
-			
+
 			int intExerciseReps = 0;
 			int intExerciseSets = 0;
 			int intExerciseWeight = 0;
@@ -230,44 +252,68 @@ namespace Final_Project
 			}
 			//finally
 			//{
-				//newExercise = CurrentExercise;
+			//newExercise = CurrentExercise;
 			//}
-			Exercise newExercise = new Exercise(exerciseName,exerciseMuscleGroup, intExerciseSets, intExerciseReps, intExerciseWeight);
+			Exercise newExercise = new Exercise(exerciseName, exerciseMuscleGroup, intExerciseSets, intExerciseReps, intExerciseWeight);
 
 			return newExercise;
 
 
 		}
-		public static void Menu(User currentUser)
+
+		/// <summary>
+		/// Will present user with some either logging a workout or
+		/// making a new one and manipulates the database approprately
+		/// </summary>
+		/// <param name="currentUser">given user after authentication</param>
+		/// <param name="connection">database connection to local database</param>
+		public static void Menu(User currentUser, SqlConnection connection)
 		{
-			Console.WriteLine("Would you like to:{0}1.)Log a New Workout{0}2.)View previous workouts{0}3.)Create new workout{0}4.)Quit",Environment.NewLine);
+			Database database = new Database(connection);
+
+			Console.WriteLine("Would you like to:{0}1.)Log a New Workout{0}2.)Create new workout{0}3.)Quit", Environment.NewLine);
 			string choice = Console.ReadLine();
-			// some regex stuff
-			// convert choice to int
 			int intChoice = Convert.ToInt32(choice);
+
 			if (intChoice == 1)
 			{
 				currentUser.ShowWorkouts();
+
+				//Choosing the workout
+				Console.WriteLine("Which workout would you like to log?");
+				string logChoice = Console.ReadLine();
+
+				//REGEX
+				Regex regex = new Regex(@"^\d+$/");
+				Match match = regex.Match(logChoice);
+				if (match.Success)
+				{
+					Environment.Exit(1);
+				}
+				int intLogChoice = Convert.ToInt32(logChoice);
+				int counter = 1;
+
+				foreach (Workout workout in currentUser.Workouts)
+				{
+					if (intLogChoice == counter)
+					{
+						database.AddWorkoutToDatabase(workout, currentUser);
+					}
+					counter++;
+				}
 			}
-			else if(intChoice == 2)
-			{
-			
-			}
-			else if (intChoice == 3)
+			else if (intChoice == 2)
 			{
 				Workout createdWorkout = CreateNewWorkout();
 				currentUser.AddWorkout(createdWorkout);
-			}
-			else if (intChoice == 4)
-			{
-			
+				database.AddWorkoutToDatabase(createdWorkout, currentUser);
 			}
 			else
 			{
-				Console.WriteLine("dont see this");
+
 			}
 
-
+			}
 		}
 	}
-}
+
