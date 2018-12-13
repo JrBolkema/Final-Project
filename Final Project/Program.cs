@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -17,7 +18,6 @@ namespace Final_Project
 
 
 
-
 			// Obtaining a file path
 			// For storing and retrieving user information
 			string filePath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
@@ -28,7 +28,43 @@ namespace Final_Project
 			write(formattedFilePath);
 			write(@"C:\Users\JrBol\source\repos\Final Project\Final Project\User Info.xml");
 
+			// Creating the database connection
+			string m_ConnectionString = @"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = "
+			+$"'{filePath}\\Final Project file.mdf';"
+			+"Integrated Security = True; Connect Timeout = 90";
+			SqlConnection myConnection = new SqlConnection(m_ConnectionString);
+			
+			//Testing the database stuff
+			using (myConnection)
+			{
+				string insertQuery = @"SELECT * FROM Users";
+				//string insertQuery = @"INSERT INTO Users
+										//	([Username]
+										//	,[Password])
+										//VALUES
+										//	(@test
+										//	,@testpass);";
+				using (SqlCommand cmd = new SqlCommand(insertQuery, myConnection))
+				{
+					myConnection.Open();
+					//cmd.Parameters.AddWithValue("@test", "test");
+					//cmd.Parameters.AddWithValue("@testpass", "TestPassword");
+					//cmd.ExecuteNonQuery();
 
+					SqlDataReader reader = cmd.ExecuteReader();
+					if (reader.HasRows)
+					{
+						while (reader.Read())
+						{
+							Console.WriteLine($"{reader[0]} {reader[1]} {reader[2]}");
+						}
+
+					}
+					reader.Close();
+				}
+			}
+			
+			
 			// Deserializing the users
 			var myXml = new MyXMLSerializer();
 			List<User> users = myXml.Deserialize<List<User>>(formattedFilePath);

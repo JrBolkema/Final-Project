@@ -28,9 +28,13 @@ namespace Final_Project
 		}
 		public void ShowWorkouts()
 		{
-			foreach (Workout workout in Workouts)
+			int counter = 1;
+			foreach (Workout workout in Workouts) 
 			{
+				Console.WriteLine($"{counter}.) {workout.WorkoutName}");
 				workout.ShowWorkout();
+				counter++;
+
 			}
 		}
 	}

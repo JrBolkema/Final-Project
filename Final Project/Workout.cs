@@ -40,11 +40,9 @@ namespace Final_Project
 
 		public void ShowWorkout()
 		{
-			int counter = 1;
 			foreach (Exercise exercise in Exercises)
 			{
-				Console.WriteLine($"{counter}.) {exercise.ShowExercise()}");
-				counter++;
+				Console.WriteLine($"{exercise.ShowExercise()}");
 			}
 
 		}
